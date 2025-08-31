@@ -6,6 +6,17 @@
     <title>Cozytustudios Podcast</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #8a7159;
+            --secondary-color: #c19a6b;
+            --background-start: #f9f2e3;
+            --background-end: #f8edd0;
+            --glass-color: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-color: #6d5c4b;
+            --shadow-color: rgba(160, 130, 100, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,12 +25,41 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f9f2e3 0%, #f8edd0 100%);
-            color: #6d5c4b;
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+            color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
         }
         
+        /* Welcome Overlay */
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--glass-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #welcome-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #welcome-overlay h1 {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 8px var(--shadow-color);
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -36,9 +76,9 @@
         
         .logo {
             height: 120px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(107, 85, 60, 0.15);
-            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            background: var(--glass-color);
             padding: 10px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -47,50 +87,49 @@
         .hero {
             text-align: center;
             margin-bottom: 40px;
-            padding: 30px;
+            padding: 40px;
             border-radius: 24px;
-            background: rgba(255, 249, 237, 0.6);
-            box-shadow: 0 8px 32px rgba(160, 130, 100, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: var(--glass-color);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
         }
         
         .hero h1 {
-            font-size: 3.2rem;
+            font-size: 3.8rem;
             margin-bottom: 20px;
-            color: #8a7159;
+            color: var(--primary-color);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             max-width: 700px;
             margin: 0 auto 30px;
-            line-height: 1.6;
+            line-height: 1.7;
         }
         
-        /* --- CHANGED THIS SECTION FOR VIDEO SIZE --- */
         .gif-container {
-            width: 100%; /* Take up available width */
-            max-width: 720px; /* Set a max width for large screens */
-            aspect-ratio: 16 / 9; /* This creates the widescreen video shape */
-            margin: 0 auto 30px;
+            width: 100%; 
+            max-width: 720px;
+            aspect-ratio: 16 / 9;
+            margin: 0 auto 40px;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 25px rgba(107, 85, 60, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 15px 35px var(--shadow-color);
+            border: 1px solid var(--glass-border);
             background: #f8edd0;
         }
         
         .btn {
             display: inline-block;
-            padding: 16px 40px;
+            padding: 18px 45px;
             background: linear-gradient(135deg, #d6b78f 0%, #c19a6b 100%);
             color: white;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
             box-shadow: 0 8px 20px rgba(160, 130, 100, 0.3);
             transition: all 0.3s ease;
@@ -100,53 +139,70 @@
         }
         
         .btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px) scale(1.05);
             box-shadow: 0 12px 25px rgba(160, 130, 100, 0.4);
         }
         
         .features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
             margin-bottom: 50px;
         }
         
         .feature-card {
-            flex: 1;
-            min-width: 250px;
-            max-width: 350px;
-            padding: 25px;
+            padding: 30px;
             border-radius: 20px;
-            background: rgba(255, 249, 237, 0.6);
-            box-shadow: 0 8px 32px rgba(160, 130, 100, 0.1);
+            background: var(--glass-color);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             text-align: center;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(160, 130, 100, 0.25);
         }
         
         .feature-card i {
-            font-size: 2.5rem;
-            color: #c19a6b;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
         }
         
         footer {
             text-align: center;
-            padding: 30px;
+            padding: 40px;
             margin-top: 40px;
-            color: #8a7159;
-            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-size: 1rem;
         }
 
-        /* Responsive design for smaller screens */
         @media (max-width: 768px) {
-            .hero h1 {
+            #welcome-overlay h1 {
                 font-size: 2.5rem;
             }
-            /* The GIF container is now naturally responsive */
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div id="welcome-overlay">
+        <h1>Welcome to the world of Cozytustudios Podcast</h1>
+    </div>
+
     <div class="container">
         <header>
             <img src="cozytustudiospodcastlogo.jpeg" alt="Cozytustudios Podcast Logo" class="logo">
@@ -187,5 +243,14 @@
     <footer>
         <p>&copy; 2023 Cozy Tu Studios Podcast. All rights reserved.</p>
     </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            const overlay = document.getElementById('welcome-overlay');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 3000);
+        });
+    </script>
 </body>
 </html>
